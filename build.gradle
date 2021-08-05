@@ -16,6 +16,10 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "http://lsdi.ufma.br:8081/artifactory/libs-release-local"
+            allowInsecureProtocol = true
+        }
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
