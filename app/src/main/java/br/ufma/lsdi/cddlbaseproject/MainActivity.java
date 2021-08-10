@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.ConnectionFactory;
@@ -14,8 +16,6 @@ import br.ufma.lsdi.cddl.listeners.IConnectionListener;
 import br.ufma.lsdi.cddl.listeners.ISubscriberListener;
 import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.network.ConnectionImpl;
-import br.ufma.lsdi.cddl.pubsub.Publisher;
-import br.ufma.lsdi.cddl.pubsub.PublisherFactory;
 import br.ufma.lsdi.cddl.pubsub.Subscriber;
 import br.ufma.lsdi.cddl.pubsub.SubscriberFactory;
 
@@ -24,19 +24,14 @@ public class MainActivity extends AppCompatActivity {
     private String host;
     private CDDL cddl;
     private ConnectionImpl connection;
-
     private Subscriber subscribe;
-
-    private String sensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setPermission();
         initCDDL();
-
     }
 
     private IConnectionListener connectionListener = new IConnectionListener() {
@@ -44,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         public void onConnectionEstablished() {
             Log.d(null, "Conexão estabelecida.");
             subscribeMessage();
-
-            publishMessage();
         }
 
         @Override
@@ -79,26 +72,21 @@ public class MainActivity extends AppCompatActivity {
         cddl.startCommunicationTechnology(CDDL.INTERNAL_TECHNOLOGY_ID);
     }
 
+    public void openActivityPublish(View view) {
+        startActivity(new Intent(getBaseContext(), PublishAcitivity.class));
+    }
+
     private void subscribeMessage() {
         subscribe = SubscriberFactory.createSubscriber();
         subscribe.addConnection(cddl.getConnection());
-        subscribe.subscribeServiceByName("imposto");
+        subscribe.subscribeServiceByName("Location");
+        subscribe.setFilter("SELECT * FROM Message WHERE serviceName = 'Location' AND accuracy <= 5.0");
         subscribe.setSubscriberListener(new ISubscriberListener() {
             @Override
             public void onMessageArrived(Message message) {
                 Log.d("cddl", "chegou mensagem");
             }
         });
-    }
-
-    private void publishMessage() {
-        Publisher publisher = PublisherFactory.createPublisher();
-        publisher.addConnection(cddl.getConnection());
-
-        Message message = new Message();
-        message.setServiceName("imposto");
-        message.setPayload("Teste".getBytes());
-        publisher.publish(message);
     }
 
     @Override
