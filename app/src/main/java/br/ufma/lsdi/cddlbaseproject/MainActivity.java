@@ -14,6 +14,8 @@ import br.ufma.lsdi.cddl.listeners.IConnectionListener;
 import br.ufma.lsdi.cddl.listeners.ISubscriberListener;
 import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.network.ConnectionImpl;
+import br.ufma.lsdi.cddl.pubsub.Publisher;
+import br.ufma.lsdi.cddl.pubsub.PublisherFactory;
 import br.ufma.lsdi.cddl.pubsub.Subscriber;
 import br.ufma.lsdi.cddl.pubsub.SubscriberFactory;
 
@@ -34,12 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
         setPermission();
         initCDDL();
+
     }
 
     private IConnectionListener connectionListener = new IConnectionListener() {
         @Override
         public void onConnectionEstablished() {
             Log.d(null, "Conexão estabelecida.");
+            subscribeMessage();
+
+            publishMessage();
         }
 
         @Override
@@ -83,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("cddl", "chegou mensagem");
             }
         });
+    }
+
+    private void publishMessage() {
+        Publisher publisher = PublisherFactory.createPublisher();
+        publisher.addConnection(cddl.getConnection());
+
+        Message message = new Message();
+        message.setServiceName("imposto");
+        message.setPayload("Teste".getBytes());
+        publisher.publish(message);
     }
 
     @Override
