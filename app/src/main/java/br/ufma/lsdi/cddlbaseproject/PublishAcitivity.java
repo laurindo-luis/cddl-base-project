@@ -42,7 +42,6 @@ public class PublishAcitivity extends AppCompatActivity {
 
         Publisher publisher = PublisherFactory.createPublisher();
         publisher.addConnection(CDDL.getInstance().getConnection());
-
         Message message = new Message();
         message.setServiceName(serviceName);
         message.setPayload(payload.getBytes());

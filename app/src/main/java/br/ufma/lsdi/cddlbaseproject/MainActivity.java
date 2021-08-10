@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getBaseContext(), PublishAcitivity.class));
     }
 
+    public void openActivitySubscribe(View view) {
+        startActivity(new Intent(getBaseContext(), SubscribeAcitivity.class));
+    }
+
     private void subscribeMessage() {
         subscribe = SubscriberFactory.createSubscriber();
         subscribe.addConnection(cddl.getConnection());

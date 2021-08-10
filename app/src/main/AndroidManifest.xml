@@ -22,6 +22,8 @@
         </activity>
 
         <activity android:name=".PublishAcitivity" />
+        <activity android:name=".SubscribeAcitivity" />
+
     </application>
 
 </manifest>
