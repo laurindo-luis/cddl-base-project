@@ -11,13 +11,21 @@ import android.util.Log;
 import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.ConnectionFactory;
 import br.ufma.lsdi.cddl.listeners.IConnectionListener;
+import br.ufma.lsdi.cddl.listeners.ISubscriberListener;
+import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.network.ConnectionImpl;
+import br.ufma.lsdi.cddl.pubsub.Subscriber;
+import br.ufma.lsdi.cddl.pubsub.SubscriberFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     private String host;
     private CDDL cddl;
     private ConnectionImpl connection;
+
+    private Subscriber subscribe;
+
+    private String sensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private IConnectionListener connectionListener = new IConnectionListener() {
-
         @Override
         public void onConnectionEstablished() {
             Log.d(null, "Conexão estabelecida.");
@@ -52,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void initCDDL() {
-        //host = "192.168.18.12";
-        host = CDDL.startMicroBroker();
+        host = "192.168.18.12";
+        //host = CDDL.startMicroBroker();
         connection = ConnectionFactory.createConnection();
         connection.setClientId("luis");
         connection.setHost(host);
@@ -64,6 +71,28 @@ public class MainActivity extends AppCompatActivity {
         cddl.setContext(this);
         cddl.startService();
         cddl.startCommunicationTechnology(CDDL.INTERNAL_TECHNOLOGY_ID);
+    }
+
+    private void subscribeMessage() {
+        subscribe = SubscriberFactory.createSubscriber();
+        subscribe.addConnection(cddl.getConnection());
+        subscribe.subscribeServiceByName("imposto");
+        subscribe.setSubscriberListener(new ISubscriberListener() {
+            @Override
+            public void onMessageArrived(Message message) {
+                Log.d("cddl", "chegou mensagem");
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        cddl.stopAllCommunicationTechnologies();;
+        cddl.stopService();
+        connection.disconnect();
+        CDDL.stopMicroBroker();
+
+        super.onDestroy();
     }
 
     private void setPermission() {
