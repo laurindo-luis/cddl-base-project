@@ -8,20 +8,21 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Button;
 
 import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.ConnectionFactory;
 import br.ufma.lsdi.cddl.listeners.IConnectionListener;
 import br.ufma.lsdi.cddl.network.ConnectionImpl;
-import br.ufma.lsdi.cddl.pubsub.Subscriber;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button buttonPublish;
+    private Button buttonSubscribe;
 
     private String host;
     private CDDL cddl;
     private ConnectionImpl connection;
-    private Subscriber subscribe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setPermission();
         initCDDL();
+
+        this.buttonPublish = findViewById(R.id.buttonPublish);
+        this.buttonSubscribe = findViewById(R.id.buttonSubscribe);
+
+        /*
+            Ao iniciar esse projeto, você deve utilizar dois emuladores. O primeiro deles
+            publica dados de contexto no broker. O segundo, se inscreve em um service name
+            e recebe os dados de contexto que o outro emulador publica.
+         */
+
+        this.buttonPublish.setOnClickListener(view ->
+                startActivity(new Intent(getBaseContext(), PublishActivity.class))
+        );
+        this.buttonSubscribe.setOnClickListener(view ->
+                startActivity(new Intent(getBaseContext(), SubscribeActivity.class))
+        );
+
     }
 
     private IConnectionListener connectionListener = new IConnectionListener() {
@@ -54,10 +72,17 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void initCDDL() {
+        /*
+            Ip do Broker MQTT
+            Para você utilizar um Broker externo ou na sua máquina, você deve
+            configurar o proxy do emulador manualmente e colocar o ip referente
+            ao Broker.
+         */
         host = "192.168.18.12";
+
         //host = CDDL.startMicroBroker();
         connection = ConnectionFactory.createConnection();
-        connection.setClientId("luis");
+        connection.setClientId("app");
         connection.setHost(host);
         connection.addConnectionListener(connectionListener);
         connection.connect();
@@ -68,21 +93,12 @@ public class MainActivity extends AppCompatActivity {
         cddl.startCommunicationTechnology(CDDL.INTERNAL_TECHNOLOGY_ID);
     }
 
-    public void openActivityPublish(View view) {
-        startActivity(new Intent(getBaseContext(), PublishAcitivity.class));
-    }
-
-    public void openActivitySubscribe(View view) {
-        startActivity(new Intent(getBaseContext(), SubscribeAcitivity.class));
-    }
-
     @Override
     protected void onDestroy() {
         cddl.stopAllCommunicationTechnologies();;
         cddl.stopService();
         connection.disconnect();
         CDDL.stopMicroBroker();
-
         super.onDestroy();
     }
 

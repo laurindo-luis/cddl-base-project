@@ -16,13 +16,12 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".PublishAcitivity" />
-        <activity android:name=".SubscribeAcitivity" />
+        <activity android:name=".PublishActivity" />
+        <activity android:name=".SubscribeActivity" />
 
     </application>
 

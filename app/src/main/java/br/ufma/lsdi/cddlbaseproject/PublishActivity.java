@@ -1,34 +1,42 @@
 package br.ufma.lsdi.cddlbaseproject;
 
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.concurrent.Flow;
 
 import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.pubsub.Publisher;
 import br.ufma.lsdi.cddl.pubsub.PublisherFactory;
 
-public class PublishAcitivity extends AppCompatActivity {
+public class PublishActivity extends AppCompatActivity {
 
-    private EditText serviceName;
-    private EditText payload;
+    private Button buttonPublish;
+    private EditText editTextServiceName;
+    private EditText editTexPayload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
 
-        this.serviceName = findViewById(R.id.serviceName);
-        this.payload = findViewById(R.id.payload);
+        this.buttonPublish = findViewById(R.id.buttonPublish);
+        this.editTexPayload = findViewById(R.id.editTextMessage);
+        this.editTextServiceName = findViewById(R.id.editTextServiceName);
+
+        this.buttonPublish.setOnClickListener(view -> {
+            publishMessage();
+        });
     }
 
-    public void publishMessage(View view) {
-        String serviceName = this.serviceName.getText().toString();
-        String payload = this.payload.getText().toString();
+    public void publishMessage() {
+        String serviceName = this.editTextServiceName.getText().toString();
+        String payload = this.editTexPayload.getText().toString();
 
         if(serviceName.trim().equals("")) {
             Toast.makeText(getBaseContext(), "Campo serviceName não pode ser vazio", Toast.LENGTH_LONG).show();

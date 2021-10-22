@@ -10,16 +10,15 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/buttonPublish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Publish"
-        android:onClick="openActivityPublish"/>
+        android:text="Publish"/>
 
     <Button
+        android:id="@+id/buttonSubscribe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subscribe"
-        android:onClick="openActivitySubscribe"/>
-
+        android:text="Subscribe"/>
 
 </LinearLayout>
