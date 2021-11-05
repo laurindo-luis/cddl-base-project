@@ -22,6 +22,7 @@
 
         <activity android:name=".PublishActivity" />
         <activity android:name=".SubscribeActivity" />
+        <activity android:name=".SensorsActivity" />"
 
     </application>
 

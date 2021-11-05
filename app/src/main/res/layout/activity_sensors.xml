@@ -9,22 +9,22 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/buttonPublish"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Publish"/>
+        android:textSize="12pt"
+        android:text="Location Sensor" />
 
     <Button
-        android:id="@+id/buttonSubscribe"
+        android:id="@+id/buttonStartSensorLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subscribe"/>
+        android:text="Start Location Sensor"/>
 
     <Button
-        android:id="@+id/buttonStartSensors"
+        android:id="@+id/buttonStopSensorLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sensors"/>
+        android:text="Stop Location Sensor"/>
 
 </LinearLayout>

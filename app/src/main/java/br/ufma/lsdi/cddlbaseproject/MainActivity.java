@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button buttonPublish;
     private Button buttonSubscribe;
+    private Button buttonStartSensors;
 
     private String host;
     private CDDL cddl;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.buttonPublish = findViewById(R.id.buttonPublish);
         this.buttonSubscribe = findViewById(R.id.buttonSubscribe);
+        this.buttonStartSensors = findViewById(R.id.buttonStartSensors);
 
         /*
             Ao iniciar esse projeto, você deve utilizar dois emuladores. O primeiro deles
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         );
         this.buttonSubscribe.setOnClickListener(view ->
                 startActivity(new Intent(getBaseContext(), SubscribeActivity.class))
+        );
+        this.buttonStartSensors.setOnClickListener(view ->
+                startActivity(new Intent(getBaseContext(), SensorsActivity.class))
         );
 
     }

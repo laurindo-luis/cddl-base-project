@@ -26,6 +26,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accuracy value" />
+
+    <EditText
+        android:id="@+id/editTextAccuracyValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"/>
+
     <Button
         android:id="@+id/buttonSubscribe"
         android:layout_width="match_parent"

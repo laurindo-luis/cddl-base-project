@@ -7,8 +7,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.concurrent.Flow;
-
 import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.pubsub.Publisher;
@@ -52,6 +50,7 @@ public class PublishActivity extends AppCompatActivity {
         publisher.addConnection(CDDL.getInstance().getConnection());
         Message message = new Message();
         message.setServiceName(serviceName);
+        message.setAccuracy(0d);
         message.setPayload(payload.getBytes());
         publisher.publish(message);
     }
