@@ -11,6 +11,8 @@ import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.pubsub.Publisher;
 import br.ufma.lsdi.cddl.pubsub.PublisherFactory;
+import br.ufma.lsdi.cddl.qos.HistoryQoS;
+import br.ufma.lsdi.cddl.qos.ReliabilityQoS;
 
 public class PublishActivity extends AppCompatActivity {
 
@@ -52,6 +54,12 @@ public class PublishActivity extends AppCompatActivity {
         message.setServiceName(serviceName);
         message.setAccuracy(0d);
         message.setPayload(payload.getBytes());
+
+        //Quality of Service
+        ReliabilityQoS reliabilityQoS = new ReliabilityQoS();
+        reliabilityQoS.setKind(ReliabilityQoS.AT_LEAST_ONCE);
+        publisher.setReliabilityQoS(reliabilityQoS);
+
         publisher.publish(message);
     }
 }

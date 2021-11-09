@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         connection.setClientId("app");
         connection.setHost(host);
         connection.addConnectionListener(connectionListener);
+        connection.setEnableIntermediateBuffer(true);
         connection.connect();
         cddl = CDDL.getInstance();
         cddl.setConnection(connection);
