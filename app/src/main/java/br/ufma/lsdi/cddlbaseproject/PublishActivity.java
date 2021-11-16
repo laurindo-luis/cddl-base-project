@@ -11,7 +11,6 @@ import br.ufma.lsdi.cddl.CDDL;
 import br.ufma.lsdi.cddl.message.Message;
 import br.ufma.lsdi.cddl.pubsub.Publisher;
 import br.ufma.lsdi.cddl.pubsub.PublisherFactory;
-import br.ufma.lsdi.cddl.qos.HistoryQoS;
 import br.ufma.lsdi.cddl.qos.ReliabilityQoS;
 
 public class PublishActivity extends AppCompatActivity {
