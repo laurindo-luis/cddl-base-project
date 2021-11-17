@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-                            @Override
+    @Override
     protected void onDestroy() {
         cddl.stopAllCommunicationTechnologies();;
         cddl.stopService();
