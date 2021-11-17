@@ -158,9 +158,6 @@ public class MainActivity extends AppCompatActivity {
             securityService.setCaCertificate(caCertFileName);
             securityService.setCertificate(clientCertFileName);
 
-            securityService.grantReadPermissionByCDDLTopic("andre", SecurityService.ALL_TOPICS);
-            securityService.grantWritePermissionByCDDLTopic("andre",SecurityService.ALL_TOPICS);
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
