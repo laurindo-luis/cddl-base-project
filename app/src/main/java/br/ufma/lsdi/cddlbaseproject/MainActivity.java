@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private String host;
     private CDDL cddl;
     private ConnectionImpl connection;
+    private String CLIENT_ID = "app";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         //host = CDDL.startMicroBroker();
         connection = ConnectionFactory.createConnection();
-        connection.setClientId("app");
+        connection.setClientId(this.CLIENT_ID);
         connection.setHost(host);
         connection.addConnectionListener(connectionListener);
         connection.setEnableIntermediateBuffer(true);
@@ -98,6 +99,85 @@ public class MainActivity extends AppCompatActivity {
         cddl.startService();
         cddl.startCommunicationTechnology(CDDL.INTERNAL_TECHNOLOGY_ID);
     }
+
+    private void secureInitCDDL() {
+        /*
+            Ip do Broker MQTT
+            Para você utilizar um Broker externo ou na sua máquina, você deve
+            configurar o proxy do emulador manualmente e colocar o ip referente
+            ao Broker.
+            Este método utiliza o cddl no modo seguro.
+         */
+        host = "192.168.18.12";
+
+//        host = CDDL.startSecureMicroBroker(getApplicationContext(), true );
+
+        connection = ConnectionFactory.createConnection();
+        connection.setClientId(this.CLIENT_ID);
+        connection.setHost(host);
+        connection.addConnectionListener(connectionListener);
+        connection.setEnableIntermediateBuffer(true);
+        connection.secureConnect(getApplicationContext());
+        cddl = CDDL.getInstance();
+        cddl.setConnection(connection);
+        cddl.setContext(this);
+        cddl.startService();
+        cddl.startCommunicationTechnology(CDDL.INTERNAL_TECHNOLOGY_ID);
+    }
+
+
+
+    /*
+        Método para gerar a requisição de certificado digital;
+    */
+    public void generateCSR(String nomeComum,
+                            String unidadeOrganizacional,
+                            String organizacao,
+                            String cidade,
+                            String estado,
+                            String pais){
+        SecurityService securityService = CDDL
+                .getSecurityServiceInstance(getApplicationContext());
+
+        securityService
+                .generateCSR(
+                        nomeComum,
+                        unidadeOrganizacional,
+                        organizacao,
+                        cidade,
+                        estado,
+                        pais);
+
+    }
+
+    /*
+       Método para importar o certificado assinado da autoridade certificadora e certificado do cliente
+    */
+    public void importClientAndCaCertificate(String caCertFileName, String clientCertFileName ){
+        try {
+            securityService.setCaCertificate(caCertFileName);
+            securityService.setCertificate(clientCertFileName);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+       Método para adicionar as regras de acesso a todos os tópicos ao microbroker para um cliente específico
+    */
+    public void importClientAndCaCertificate(String clientID, String clientCertFileName ){
+        try {
+
+
+            securityService.grantReadPermissionByCDDLTopic(clientID, SecurityService.ALL_TOPICS);
+            securityService.grantWritePermissionByCDDLTopic(clientID,SecurityService.ALL_TOPICS);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
